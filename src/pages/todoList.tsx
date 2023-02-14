@@ -4,6 +4,8 @@ import TodoItem from '../components/TodoItem';
 import useTodos from '../hooks/useTodos';
 import useInput from '../hooks/useInput';
 import Button from '../components/Button';
+import useAuth from '../hooks/useAuth';
+import styled from '@emotion/styled';
 
 const handleSubmit = (cb: () => void) => {
   return (e: FormEvent<HTMLFormElement>) => {
@@ -42,20 +44,25 @@ function TodoList() {
     });
   };
 
+  const { logout } = useAuth();
+
   if (loading) return <div>로딩중...</div>;
 
   return (
     <div>
-      <div>
-        <form onSubmit={handleCreate}>
-          <input
-            data-testid="new-todo-input"
-            value={newTodo}
-            onChange={onChangeNewTodo}
-          />
-          <Button id="new-todo-add-button" title="추가" />
-        </form>
-      </div>
+      <Header>
+        <div>
+          <form onSubmit={handleCreate}>
+            <input
+              data-testid="new-todo-input"
+              value={newTodo}
+              onChange={onChangeNewTodo}
+            />
+            <Button id="new-todo-add-button" title="추가" />
+          </form>
+        </div>
+        <Button type="button" title="로그아웃" onClick={logout} />
+      </Header>
       <ul>
         {todos.map((item) => (
           <TodoItem
@@ -71,3 +78,8 @@ function TodoList() {
 }
 
 export default withLoggedIn(TodoList);
+
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;

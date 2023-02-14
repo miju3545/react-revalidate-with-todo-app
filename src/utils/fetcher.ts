@@ -26,10 +26,12 @@ export const fetcher = async ({
     headers: authNeeded
       ? {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': BASE_URL,
           Authorization: token.get(),
         }
       : {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': BASE_URL,
         },
   };
 
