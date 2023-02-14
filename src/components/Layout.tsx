@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 
 const Container = styled.div`
-  max-width: 800px;
+  max-width: 500px;
   margin: auto;
   padding: 20px;
 `;
