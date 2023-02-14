@@ -43,19 +43,17 @@ function SignUp() {
       method: 'POST',
       path: '/auth/signup',
       body: data,
-    })
-      .then((res) => {
-        if (res.statusCode === 201) {
-          reset();
-          navigate('/signin');
-        } else {
-          setError('email', { message: '이미 사용중인 이메일이에요:(' });
-          setError('password', {});
-          setFocus('email');
-          setFocus('password');
-        }
-      })
-      .catch((error) => console.log('ERROR', error));
+    }).then((res) => {
+      if (res.statusCode === 201) {
+        reset();
+        navigate('/signin');
+      } else {
+        setError('email', { message: '이미 사용중인 이메일이에요:(' });
+        setError('password', {});
+        setFocus('email');
+        setFocus('password');
+      }
+    });
   };
 
   useEffect(() => {
@@ -92,8 +90,9 @@ function SignUp() {
         </InputWrapper>
         <Button
           id={'signup-button'}
-          component={'가입하기'}
+          title={'가입하기'}
           disabled={!isValid}
+          style={{ padding: '10px 12px', fontSize: '14px' }}
         />
         <ErrorMessage>{errors.email?.message}</ErrorMessage>
       </form>

@@ -8,7 +8,7 @@ import Button from '../components/Button';
 import token from '../utils/token';
 import { Link, useNavigate } from 'react-router-dom';
 import withNotLoggedIn from '../utils/withNotLoggedIn';
-import { Container, ErrorMessage, Form, InputWrapper } from './signup';
+import { Container, ErrorMessage, InputWrapper } from './signup';
 
 type FormValues = {
   email: string;
@@ -46,16 +46,18 @@ function SignIn() {
       path: '/auth/signin',
       body: data,
     }).then((res) => {
-      if (res.access_token) {
-        token.save(res.access_token);
-        navigate('/todos');
-        reset();
-      } else {
+      if (res.statusCode === 404) {
+        setError('password', {});
+        setError('email', { message: '가입되지 않은 이메일입니다:(' });
+      } else if (res.statusCode === 401) {
+        setError('password', {});
         setError('email', {
           message: '아이디 또는 비밀번호가 일치하지 않아요:(',
         });
-        setError('password', {});
-        setFocus('email');
+      } else {
+        token.save(res.access_token);
+        navigate('/todo');
+        reset();
       }
     });
   };
@@ -86,7 +88,13 @@ function SignIn() {
             type="password"
           />
         </InputWrapper>
-        <Button id={'signup-button'} component={'로그인'} disabled={!isValid} />
+        <Button
+          id={'signup-button'}
+          title={'로그인'}
+          disabled={!isValid}
+          style={{ padding: '10px 12px', fontSize: '14px' }}
+        />
+
         <ErrorMessage>{errors.email?.message}</ErrorMessage>
       </form>
     </Container>
