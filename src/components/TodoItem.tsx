@@ -13,14 +13,16 @@ function TodoItem({ id, todo, isCompleted, onUpdate, onDelete }: TodoProps) {
   const [completed, toggleCompleted] = useInputAysnc(isCompleted);
   const [edit, editing, reset] = useInputAysnc(todo);
   const [showEditForm, toggleShowEditForm] = useReducer((p) => !p, false);
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleUpdate();
     }
   };
 
   const handleUpdate = () => {
+    if (!todo) return;
     onUpdate(id, {
       isCompleted: completed,
       todo: edit,
@@ -31,10 +33,6 @@ function TodoItem({ id, todo, isCompleted, onUpdate, onDelete }: TodoProps) {
   const handleUpdateCompleted = (e: ChangeEvent<HTMLInputElement>) => {
     toggleCompleted(e);
     onUpdate(id, { isCompleted: e.target.checked, todo: edit });
-  };
-
-  const handleDelete = () => {
-    onDelete(id);
   };
 
   return (
@@ -49,6 +47,7 @@ function TodoItem({ id, todo, isCompleted, onUpdate, onDelete }: TodoProps) {
           <Text className="textbox">
             {showEditForm ? (
               <input
+                data-testid="modify-input"
                 value={edit}
                 onChange={editing}
                 onKeyDown={handleKeyDown}
@@ -89,7 +88,7 @@ function TodoItem({ id, todo, isCompleted, onUpdate, onDelete }: TodoProps) {
               id="delete-button"
               title="삭제"
               type="button"
-              onClick={handleDelete}
+              onClick={() => onDelete(id)}
             />
           </>
         )}
