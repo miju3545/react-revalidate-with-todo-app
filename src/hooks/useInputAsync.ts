@@ -9,11 +9,11 @@ type ReturnType<T> = [
 const useInputAysnc = <T>(initialValue: T): ReturnType<T> => {
   const [value, setValue] = useState(initialValue);
   const handler = (e: ChangeEvent<HTMLInputElement>) => {
-    if (typeof value === 'boolean') {
-      setValue(e.target.checked as unknown as T);
-    } else {
-      setValue(e.target.value as unknown as T);
-    }
+    setValue(
+      typeof value === 'boolean'
+        ? (e.target.checked as unknown as T)
+        : (e.target.value as unknown as T)
+    );
   };
 
   const reset = () => setValue(initialValue);

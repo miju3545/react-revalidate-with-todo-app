@@ -11,8 +11,8 @@ const useInput = <T>(initialValue: T): ReturnType<T> => {
   const handler = (e: ChangeEvent<HTMLInputElement>) =>
     setValue(e.target.value as unknown as T);
 
-  const clear = () => setValue(initialValue);
-  return [value, handler, clear];
+  const reset = () => setValue(initialValue);
+  return [value, handler, reset];
 };
 
 export default useInput;
