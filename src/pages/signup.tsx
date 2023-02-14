@@ -68,22 +68,16 @@ function SignUp() {
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputWrapper>
-          <span>Email</span>
-          <Input
-            id={'email-input'}
-            control={control}
-            name={'email'}
-            placeholder="email"
-          />
+          <span>이메일</span>
+          <Input id={'email-input'} control={control} name={'email'} />
         </InputWrapper>
         <InputWrapper>
-          <span>Password</span>
+          <span>패스워드</span>
           <Input
             id={'password-input'}
             control={control}
             name={'password'}
             type="password"
-            placeholder="password"
           />
         </InputWrapper>
         <Button
