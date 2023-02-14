@@ -8,6 +8,7 @@ import Button from '../components/Button';
 import { useNavigate, Link } from 'react-router-dom';
 import withNotLoggedIn from '../utils/withNotLoggedIn';
 import styled from '@emotion/styled';
+import useAuth from '../hooks/useAuth';
 
 type FormValues = {
   email: string;
@@ -38,18 +39,15 @@ function SignUp() {
     defaultValues: { email: '', password: '' },
   });
 
+  const { signup } = useAuth();
   const onSubmit = (data: FormValues) => {
-    fetcher({
-      method: 'POST',
-      path: '/auth/signup',
-      body: data,
-    }).then((res) => {
-      if (res.statusCode === 201) {
-        reset();
-        navigate('/signin');
-      } else {
+    signup(data).then((res) => {
+      if (res.statusCode === 400) {
         setError('email', { message: '이미 사용중인 이메일이에요:(' });
         setError('password', {});
+      } else {
+        reset();
+        navigate('/signin');
       }
     });
   };
@@ -68,11 +66,11 @@ function SignUp() {
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputWrapper>
-          <span>이메일</span>
+          <span className="label">이메일</span>
           <Input id={'email-input'} control={control} name={'email'} />
         </InputWrapper>
         <InputWrapper>
-          <span>패스워드</span>
+          <span className="label">패스워드</span>
           <Input
             id={'password-input'}
             control={control}

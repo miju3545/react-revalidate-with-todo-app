@@ -9,6 +9,7 @@ import token from '../utils/token';
 import { Link, useNavigate } from 'react-router-dom';
 import withNotLoggedIn from '../utils/withNotLoggedIn';
 import { Container, ErrorMessage, InputWrapper } from './signup';
+import useAuth from '../hooks/useAuth';
 
 type FormValues = {
   email: string;
@@ -37,15 +38,12 @@ function SignIn() {
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
     defaultValues: { email: '', password: '' },
-    mode: 'onChange',
   });
 
+  const { signin } = useAuth();
+
   const onSubmit = (data: FormValues) => {
-    fetcher({
-      method: 'POST',
-      path: '/auth/signin',
-      body: data,
-    }).then((res) => {
+    signin(data).then((res) => {
       if (res.statusCode === 404) {
         setError('password', {});
         setError('email', { message: '가입되지 않은 이메일입니다:(' });
