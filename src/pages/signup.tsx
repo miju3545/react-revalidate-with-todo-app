@@ -19,7 +19,7 @@ function SignUp() {
   const schema = yup.object({
     email: yup
       .string()
-      .matches(/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/)
+      .matches(/[a-z0-9]+@/)
       .required('email is required'),
     password: yup
       .string()
@@ -50,8 +50,6 @@ function SignUp() {
       } else {
         setError('email', { message: '이미 사용중인 이메일이에요:(' });
         setError('password', {});
-        setFocus('email');
-        setFocus('password');
       }
     });
   };
@@ -130,7 +128,8 @@ export const InputWrapper = styled.label`
   flex-direction: column;
   margin-bottom: 10px;
 
-  > span {
+  > .label {
+    font-size: 13px;
     margin-bottom: 2px;
   }
 

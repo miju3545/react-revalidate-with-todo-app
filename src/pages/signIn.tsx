@@ -20,7 +20,7 @@ function SignIn() {
   const schema = yup.object({
     email: yup
       .string()
-      .matches(/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/)
+      .matches(/[a-z0-9]+@/)
       .required('email is required'),
     password: yup
       .string()
@@ -76,11 +76,11 @@ function SignIn() {
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputWrapper>
-          <span>Email</span>
+          <span className="label">이메일</span>
           <Input id={'email-input'} control={control} name={'email'} />
         </InputWrapper>
         <InputWrapper>
-          <span>Password</span>
+          <span className="label">패스워드</span>
           <Input
             id={'password-input'}
             control={control}
@@ -89,7 +89,7 @@ function SignIn() {
           />
         </InputWrapper>
         <Button
-          id={'signup-button'}
+          id={'signin-button'}
           title={'로그인'}
           disabled={!isValid}
           style={{ padding: '10px 12px', fontSize: '14px' }}
