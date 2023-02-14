@@ -1,7 +1,6 @@
 import React, { useReducer, memo, KeyboardEvent, ChangeEvent } from 'react';
 import { Todo } from '../utils/types';
 import Button from './Button';
-import useInput from '../hooks/useInput';
 import styled from '@emotion/styled';
 import useInputAysnc from '../hooks/useInputAsync';
 
@@ -12,26 +11,26 @@ type TodoProps = Todo & {
 
 function TodoItem({ id, todo, isCompleted, onUpdate, onDelete }: TodoProps) {
   const [completed, toggleCompleted] = useInputAysnc(isCompleted);
-  const [editedTodo, editing] = useInputAysnc(todo);
+  const [edit, editing, reset] = useInputAysnc(todo);
   const [showEditForm, toggleShowEditForm] = useReducer((p) => !p, false);
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter') {
       e.preventDefault();
       handleUpdate();
-      toggleShowEditForm();
     }
   };
 
   const handleUpdate = () => {
     onUpdate(id, {
       isCompleted: completed,
-      todo: editedTodo,
+      todo: edit,
     });
+    toggleShowEditForm();
   };
 
   const handleUpdateCompleted = (e: ChangeEvent<HTMLInputElement>) => {
     toggleCompleted(e);
-    onUpdate(id, { isCompleted: e.target.checked, todo: editedTodo });
+    onUpdate(id, { isCompleted: e.target.checked, todo: edit });
   };
 
   const handleDelete = () => {
@@ -50,9 +49,10 @@ function TodoItem({ id, todo, isCompleted, onUpdate, onDelete }: TodoProps) {
           <Text className="textbox">
             {showEditForm ? (
               <input
-                value={editedTodo}
+                value={edit}
                 onChange={editing}
                 onKeyDown={handleKeyDown}
+                autoFocus
               />
             ) : (
               <span>{todo}</span>
@@ -71,7 +71,10 @@ function TodoItem({ id, todo, isCompleted, onUpdate, onDelete }: TodoProps) {
               id="cancel-button"
               title="취소"
               type="button"
-              onClick={toggleShowEditForm}
+              onClick={() => {
+                toggleShowEditForm();
+                reset();
+              }}
             />
           </>
         ) : (
