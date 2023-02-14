@@ -11,19 +11,19 @@ export const fetcher = async ({
   path,
   body,
   params,
-  auth,
+  authNeeded,
 }: {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   path: string;
   body?: AnyOBJ;
   params?: AnyOBJ;
-  auth?: string;
+  authNeeded?: boolean;
 }) => {
   let url = `${BASE_URL}${path}`;
 
   const options: RequestInit = {
     method,
-    headers: auth
+    headers: authNeeded
       ? {
           'Content-Type': 'application/json',
           Authorization: token.get(),
