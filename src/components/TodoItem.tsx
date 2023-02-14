@@ -11,7 +11,7 @@ type TodoProps = Todo & {
 
 function TodoItem({ id, todo, isCompleted, onUpdate, onDelete }: TodoProps) {
   const [completed, toggleCompleted] = useInputAysnc(isCompleted);
-  const [edit, editing, reset] = useInputAysnc(todo);
+  const [editTodo, editing, resetEditTodo] = useInputAysnc(todo);
   const [showEditForm, toggleShowEditForm] = useReducer((p) => !p, false);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -25,14 +25,14 @@ function TodoItem({ id, todo, isCompleted, onUpdate, onDelete }: TodoProps) {
     if (!todo) return;
     onUpdate(id, {
       isCompleted: completed,
-      todo: edit,
+      todo: editTodo,
     });
     toggleShowEditForm();
   };
 
   const handleUpdateCompleted = (e: ChangeEvent<HTMLInputElement>) => {
     toggleCompleted(e);
-    onUpdate(id, { isCompleted: e.target.checked, todo: edit });
+    onUpdate(id, { isCompleted: e.target.checked, todo: editTodo });
   };
 
   return (
@@ -48,7 +48,7 @@ function TodoItem({ id, todo, isCompleted, onUpdate, onDelete }: TodoProps) {
             {showEditForm ? (
               <input
                 data-testid="modify-input"
-                value={edit}
+                value={editTodo}
                 onChange={editing}
                 onKeyDown={handleKeyDown}
                 autoFocus
@@ -72,7 +72,7 @@ function TodoItem({ id, todo, isCompleted, onUpdate, onDelete }: TodoProps) {
               type="button"
               onClick={() => {
                 toggleShowEditForm();
-                reset();
+                resetEditTodo();
               }}
             />
           </>

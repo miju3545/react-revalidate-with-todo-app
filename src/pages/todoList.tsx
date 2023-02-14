@@ -5,7 +5,7 @@ import useTodos from '../hooks/useTodos';
 import useInput from '../hooks/useInput';
 import Button from '../components/Button';
 
-const handleSubmit = (cb: any) => {
+const handleSubmit = (cb: () => void) => {
   return (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     cb();
