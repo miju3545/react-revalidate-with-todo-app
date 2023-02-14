@@ -10,14 +10,14 @@ function withLoggedIn<T extends WrappedProps>(
   const Component = (props: T) => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
-    const isNotLogged = !token.isExist();
+    const isLoggedIn = token.isExist();
 
     useEffect(() => {
       if (pathname === '/') navigate('/todo');
-      if (isNotLogged) {
+      if (!isLoggedIn) {
         navigate('/signin');
       }
-    }, [isNotLogged, navigate]);
+    }, [isLoggedIn, navigate]);
 
     return <WrappedComponent {...props} />;
   };

@@ -9,13 +9,13 @@ function withNotLoggedIn<T extends WrappedProps>(
 ) {
   const Component = (props: T) => {
     const navigate = useNavigate();
-    const isLogged = token.isExist();
+    const isLoggedIn = token.isExist();
 
     useEffect(() => {
-      if (isLogged) {
-        navigate('/todos');
+      if (isLoggedIn) {
+        navigate('/todo');
       }
-    }, [isLogged, navigate]);
+    }, [isLoggedIn, navigate]);
 
     return <WrappedComponent {...props} />;
   };
