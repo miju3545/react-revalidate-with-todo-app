@@ -18,6 +18,7 @@ function TodoList() {
   const [newTodo, onChangeNewTodo, clearNewTodo] = useInput('');
 
   const handleCreate = handleSubmit(() => {
+    if (!newTodo) return;
     createTodo({ todo: newTodo }).then(() => {
       revalidate();
       clearNewTodo();
@@ -25,6 +26,7 @@ function TodoList() {
   });
 
   const handleDelete = (id: number) => {
+    if (!id) return;
     deleteTodo(id).then(() => {
       revalidate();
     });
@@ -34,6 +36,7 @@ function TodoList() {
     id: number,
     body: { isCompleted: boolean; todo: string }
   ) => {
+    if (!body.todo) return;
     updateTodo(id, body).then(() => {
       revalidate();
     });
