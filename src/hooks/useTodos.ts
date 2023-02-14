@@ -1,17 +1,26 @@
-import { useState, useEffect, useReducer, useMemo } from 'react';
+import { useState, useEffect, useReducer, useMemo, useCallback } from 'react';
 import fetcher from '../utils/fetcher';
 import { Todo } from '../utils/types';
 
-export function useGetTodos(): {
+export default function useTodos(): {
   loading: boolean;
-  data: Todo[];
+  todos: Todo[];
   error: unknown;
   revalidate: React.DispatchWithoutAction;
+  updateTodo: (
+    id: number,
+    body: {
+      todo: string;
+      isCompleted: boolean;
+    }
+  ) => Promise<unknown>;
+  createTodo: (body: { todo: string }) => Promise<unknown>;
+  deleteTodo: (id: number) => Promise<unknown>;
 } {
   const [_data, setData] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-  const data = useMemo(() => _data, [_data]);
+  const todos = useMemo(() => _data, [_data]);
   const [rerender, forceRender] = useReducer((p) => !p, false);
 
   useEffect(() => {
@@ -21,41 +30,37 @@ export function useGetTodos(): {
       .catch(setError);
   }, [rerender]);
 
-  return { loading, data, error, revalidate: forceRender };
-}
-
-export function useCreateTodo() {
-  const mutate = (body: { todo: string }) => {
+  const createTodo = useCallback((body: { todo: string }) => {
     return fetcher({ method: 'POST', path: '/todos', body, authNeeded: true });
-  };
+  }, []);
 
-  return mutate;
-}
+  const updateTodo = useCallback(
+    (id: string | number, body: { todo: string; isCompleted: boolean }) => {
+      return fetcher({
+        method: 'PUT',
+        path: `/todos/${id}`,
+        body,
+        authNeeded: true,
+      });
+    },
+    []
+  );
 
-export function useUpdateTodo() {
-  const mutate = (
-    id: string | number,
-    body: { todo: string; isCompleted: boolean }
-  ) => {
-    return fetcher({
-      method: 'PUT',
-      path: `/todos/${id}`,
-      body,
-      authNeeded: true,
-    });
-  };
-
-  return mutate;
-}
-
-export function useDeleteTodo() {
-  const mutate = (id: string | number) => {
+  const deleteTodo = useCallback((id: number) => {
     return fetcher({
       method: 'DELETE',
       path: `/todos/${id}`,
       authNeeded: true,
     });
-  };
+  }, []);
 
-  return mutate;
+  return {
+    loading,
+    todos,
+    error,
+    revalidate: forceRender,
+    updateTodo,
+    createTodo,
+    deleteTodo,
+  };
 }
