@@ -1,12 +1,7 @@
 import React, { FormEvent } from 'react';
 import withLoggedIn from '../utils/withLoggedIn';
 import TodoItem from '../components/TodoItem';
-import {
-  useGetTodos,
-  useCreateTodo,
-  useUpdateTodo,
-  useDeleteTodo,
-} from '../hooks/useTodos';
+import useTodos from '../hooks/useTodos';
 import useInput from '../hooks/useInput';
 import Button from '../components/Button';
 
@@ -18,10 +13,8 @@ const handleSubmit = (cb: any) => {
 };
 
 function TodoList() {
-  const { data: todos, revalidate } = useGetTodos();
-  const createTodo = useCreateTodo();
-  const updateTodo = useUpdateTodo();
-  const deleteTodo = useDeleteTodo();
+  const { loading, todos, revalidate, createTodo, updateTodo, deleteTodo } =
+    useTodos();
   const [newTodo, onChangeNewTodo, clearNewTodo] = useInput('');
 
   const handleCreate = handleSubmit(() => {
@@ -32,8 +25,6 @@ function TodoList() {
   });
 
   const handleDelete = (id: number) => {
-    console.log('삭제되었습니다.');
-
     deleteTodo(id).then(() => {
       revalidate();
     });
@@ -43,11 +34,12 @@ function TodoList() {
     id: number,
     body: { isCompleted: boolean; todo: string }
   ) => {
-    updateTodo(id, body).then((res) => {
-      console.log(res);
+    updateTodo(id, body).then(() => {
       revalidate();
     });
   };
+
+  if (loading) return <div>로딩중...</div>;
 
   return (
     <div>
