@@ -122,5 +122,5 @@ const Checkbox = styled.input`
 
 const Text = styled.span`
   font-size: 14px;
-  margin-right: 10px;
+  margin-right: 5px;
 `;

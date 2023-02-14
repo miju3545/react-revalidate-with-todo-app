@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes, CSSProperties } from 'react';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  id: string;
+  id?: string;
   title: React.ReactNode | string;
   type?: 'button' | 'submit';
   style?: CSSProperties;
