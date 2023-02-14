@@ -9,4 +9,4 @@
 
 ## 배포 링크
 
-[배포 링크 첨부](https://wanted-pre-onboarding-frontend-silk.vercel.app)
+[배포 링크 첨부](https://wanted-pre-onboarding-frontend-c0l0dhh98-rovxxmjxx.vercel.app)
